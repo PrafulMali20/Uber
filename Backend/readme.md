@@ -88,6 +88,71 @@ The request body must be a JSON object with the following fields:
 }
 ```
 
+### POST `/users/login`
+
+This endpoint is used to log in an existing user.
+
+#### Request Body
+
+The request body must be a JSON object with the following fields:
+
+- `email` (string, required): The email address of the user.
+- `password` (string, required): The password for the user.
+
+#### Example Request Body
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "securepassword"
+}
+```
+
+#### Field Details
+
+| Field      | Type   | Required | Conditions                                   |
+|------------|--------|----------|---------------------------------------------|
+| `email`    | String | Yes      | Must be a valid email address.              |
+| `password` | String | Yes      | Minimum 6 characters.                       |
+
+#### Responses
+
+- **200 OK**: User successfully logged in.
+  - Example Response:
+    ```json
+    {
+      "user": {
+        "_id": "64f1c2e7e4b0a5c123456789",
+        "fullname": {
+          "firstname": "John",
+          "lastname": "Doe"
+        },
+        "email": "john.doe@example.com"
+      },
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+    ```
+- **400 Bad Request**: Validation errors or missing fields.
+  - Example Response:
+    ```json
+    {
+      "errors": [
+        {
+          "msg": "Enter a valid email",
+          "param": "email",
+          "location": "body"
+        }
+      ]
+    }
+    ```
+- **401 Unauthorized**: Invalid email or password.
+  - Example Response:
+    ```json
+    {
+      "message": "Invalid email or password"
+    }
+    ```
+
 ## Setup Instructions
 
 1. Clone the repository.
