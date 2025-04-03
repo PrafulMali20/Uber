@@ -1,6 +1,8 @@
 const userModel = require("../models/user.model");
 const userService = require("../services/user.service");
 const { validationResult } = require("express-validator");
+const blacklistTokenModel = require("../models/blacklistToken.model");
+
 
 module.exports.registerUser = async (req, res, next) => {
   const errors = validationResult(req);
@@ -14,11 +16,23 @@ module.exports.registerUser = async (req, res, next) => {
 
   const user = await userService.createUser({
     firstname: fullname.firstname ,
-    lastname: fullname.lastname ,
+    lastname: fullname.lastname  ,
     email,
     password: hashedPassword, 
   });
   const token = user.generateAuthToken();
+
+  res.cookie("token", token, {
+    httpOnly: true,  // Prevents JavaScript access
+    secure: false,   // Set to `true` in HTTPS
+    sameSite: "Lax", // Controls cross-site behavior
+  });
+  
+  console.log("Set-Cookie Header:", res.getHeaders()["set-cookie"]); // Debugging  
+  res.status(200).json({ message: "Cookie set!" });
+  
+
+
   res.status(201).json({ user, token });
 };
 module.exports.loginUser = async (req, res, next) => {
@@ -51,3 +65,16 @@ module.exports.loginUser = async (req, res, next) => {
     res.status(200).json({ user, token });
   };
   
+  module.exports.getUserProfile = async (req, res, next) => {
+    res.status(200).json(req.user);
+  }
+
+  module.exports.logoutUser = async (req, res, next) => {
+    res.clearCookie("token");
+    
+    const token = req.cookies.token || req.headers["authorization"]?.split(" ")[1];
+
+    await blacklistTokenModel.create({ token });
+
+    res.status(200).json({ message: "Logged out successfully" });
+  };

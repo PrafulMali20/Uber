@@ -8,12 +8,12 @@ const userSchema = new mongoose.Schema({
       required: true,
       minlength: [3, "first name must be at least 3 characters long"],
     },
+    lastname: {
+      type: String,
+      minlength: [3, "last name must be at least 3 characters long"],
+    },
   },
-  lastname: {
-    type: String,
-    minlength: [3, "last name must be at least 3 characters long"],
-  },
-  email: {
+  email: { 
     type: String,
     required: true,
     unique: true,
@@ -30,8 +30,8 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET_KEY);
-  return token;
+const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' });
+return token;
 };
 
 userSchema.methods.comparePassword = async function (password) {

@@ -153,6 +153,71 @@ The request body must be a JSON object with the following fields:
     }
     ```
 
+### GET `/users/profile`
+
+This endpoint is used to get the authenticated user's profile information.
+
+#### Authentication
+
+Requires a valid JWT token in the Authorization header:
+```
+Authorization: Bearer <token>
+```
+
+#### Responses
+
+- **200 OK**: Profile successfully retrieved.
+  - Example Response:
+    ```json
+    {
+      "_id": "64f1c2e7e4b0a5c123456789",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+    }
+    ```
+- **401 Unauthorized**: No token provided or invalid token.
+  - Example Response:
+    ```json
+    {
+      "message": "Access denied. No token provided"
+    }
+    ```
+
+### GET `/users/logout`
+
+This endpoint is used to log out the current user and invalidate their token.
+
+#### Authentication
+
+Requires a valid JWT token in the Authorization header or cookies:
+```
+Authorization: Bearer <token>
+```
+or
+```
+Cookie: token=<token>
+```
+
+#### Responses
+
+- **200 OK**: Successfully logged out.
+  - Example Response:
+    ```json
+    {
+      "message": "Logged out successfully"
+    }
+    ```
+- **401 Unauthorized**: No token provided or invalid token.
+  - Example Response:
+    ```json
+    {
+      "message": "Access denied. No token provided"
+    }
+    ```
+
 ## Setup Instructions
 
 1. Clone the repository.
