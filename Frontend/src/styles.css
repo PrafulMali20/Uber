@@ -1,0 +1,10 @@
+
+  
+  /* Desktop View (Min-width: 1024px) */
+  @media screen and (min-width: 1024px) {
+    .bg-responsive {
+      background-image: url('/public/Rydo_D.png') !important;
+      background-size: cover !important; /* ✅ Ensures full fit without cropping */
+    }
+  }
+  
