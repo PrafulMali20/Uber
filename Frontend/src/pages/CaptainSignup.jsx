@@ -82,7 +82,7 @@ const CaptainSignup = () => {
           placeholder="password"
         />
         <button className="bg-[#111] text-white font-semibold mb-5 rounded px-4  w-full text-lg placeholder:text-sm">
-          Signup
+          Create account
         </button>
         <p className="text-center">
           Already have an account!{" "}
